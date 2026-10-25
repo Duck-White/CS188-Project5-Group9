@@ -22,7 +22,7 @@ from torch import movedim
 def train_perceptron(model, dataset):
     """
     Train the perceptron until convergence.
-    You can iterate through DataLoader in order to
+    You can iterate through DataLoader in order to 
     retrieve all the batches you need to train on.
 
     Each sample in the dataloader is in the form {'x': features, 'label': label} where label
@@ -31,16 +31,6 @@ def train_perceptron(model, dataset):
     with no_grad():
         dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
         "*** YOUR CODE HERE ***"
-        max_epochs = 10000  # safety net: never loops forever on data that is not separable
-        for epoch in range(max_epochs):
-            mistakes = 0
-            for batch in dataloader:
-                x, y = batch['x'], batch['label']  # x: (1 x dimensions), y: +1 or -1
-                if model.get_prediction(x) != y.item():
-                    model.w += y * x  # w <- w + y * x  (direction = x, magnitude = y)
-                    mistakes += 1
-            if mistakes == 0:  # a full pass without a single mistake: 100% training accuracy
-                break
 
 
 def train_regression(model, dataset):
