@@ -54,7 +54,7 @@ class PerceptronModel(Module):
         "*** YOUR CODE HERE ***"
         # Dot product w . x: (batch x dimensions) @ (dimensions x 1) -> (batch x 1).
         # .to(...) only guards against an input that uses a different float type.
-        return x.to(self.w.dtype) @ self.w.T
+        return (x.to(self.w.dtype) @ self.w.T).reshape(1)
 
     def get_prediction(self, x):
         """
