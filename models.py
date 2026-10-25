@@ -29,13 +29,20 @@ class PerceptronModel(Module):
         class (+1) or not (-1). `dimensions` is the dimensionality of the data.
         For example, dimensions=2 would mean that the perceptron must classify
         2D points.
+
+        In order for our autograder to detect your weight, initialize it as a
+        pytorch Parameter object as follows:
+
+        Parameter(weight_vector)
+
+        where weight_vector is a pytorch Tensor of dimension 'dimensions'
+
+        Hint: You can use ones(dim) to create a tensor of dimension dim.
         """
         super(PerceptronModel, self).__init__()
 
         "*** YOUR CODE HERE ***"
-        # One weight per feature, stored as a (1 x dimensions) Parameter so that
-        # PyTorch and the autograder register it as a parameter of the model.
-        self.w = Parameter(ones(1, dimensions))
+
 
     def get_weights(self):
         """
@@ -48,13 +55,14 @@ class PerceptronModel(Module):
         Calculates the score assigned by the perceptron to a data point x.
 
         Inputs:
-            x: a tensor with shape (1 x dimensions)
-        Returns: a tensor containing a single number (the score)
+            x: a node with shape (dimensions)
+        Returns: a node containing a single number (the score)
+
+        The pytorch function `tensordot` may be helpful here.
         """
         "*** YOUR CODE HERE ***"
-        # Dot product w . x: (batch x dimensions) @ (dimensions x 1) -> (batch x 1).
-        # .to(...) only guards against an input that uses a different float type.
-        return x.to(self.w.dtype) @ self.w.T
+
+        
 
     def get_prediction(self, x):
         """
@@ -62,10 +70,10 @@ class PerceptronModel(Module):
 
         Returns: 1 or -1
         """
+        score = self(x)
+
         "*** YOUR CODE HERE ***"
-        # A non-negative score means class +1 (a point exactly on the boundary
-        # counts as +1); a negative score means class -1.
-        return 1 if self.forward(x).item() >= 0 else -1
+
 
 
 class RegressionModel(Module):
