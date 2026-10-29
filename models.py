@@ -197,63 +197,64 @@ class LanguageIDModel(Module):
 
 
 
-def Convolve(input: tensor, weight: tensor):
+def Convolve(input_matrix, weight_matrix):
     """
-    Acts as a convolution layer by applying a 2d convolution with the given inputs and weights.
-    DO NOT import any pytorch methods to directly do this, the convolution must be done with only the functions
-    already imported.
-
-    There are multiple ways to complete this function. One possible solution would be to use 'tensordot'.
-    If you would like to index a tensor, you can do it as such:
-
-    tensor[y:y+height, x:x+width]
-
-    This returns a subtensor who's first element is tensor[y,x] and has height 'height, and width 'width'
-
-    The method 'zeros((y_dim,x_dim))' may also be useful. It initializes a pytorch tensor with dimensions (y_dim, x_dim), with every value
-    set to zero.
+    Tính phép tích chập 2D giữa input_matrix (28x28) và weight_matrix (3x3)
+    Trả về Tensor 2D kích thước (26, 26)
     """
-    input_tensor_dimensions = input.shape
-    weight_dimensions = weight.shape
-    Output_Tensor = tensor(())
-    "*** YOUR CODE HERE ***"
+    input_height, input_width = input_matrix.shape
+    kernel_height, kernel_width = weight_matrix.shape
 
-    "*** End Code ***"
-    return Output_Tensor
+    out_height = input_height - kernel_height + 1
+    out_width = input_width - kernel_width + 1
+
+    output_rows = []
+    for i in range(out_height):
+        row = []
+        for j in range(out_width):
+            sub_matrix = input_matrix[i : i + kernel_height, j : j + kernel_width]
+            val = (sub_matrix * weight_matrix).sum()
+            row.append(val)
+        output_rows.append(stack(row))
+
+    return stack(output_rows)
 
 
 class DigitConvolutionalModel(Module):
     """
     A model for handwritten digit classification using the MNIST dataset.
-
-    This class is a convolutational model which has already been trained on MNIST.
-    if Convolve() has been correctly implemented, this model should be able to achieve a high accuracy
-    on the mnist dataset given the pretrained weights.
-
-    Note that this class looks different from a standard pytorch model since we don't need to train it
-    as it will be run on preset weights.
     """
 
     def __init__(self):
-        # Initialize your model parameters here
         super().__init__()
         output_size = 10
 
         self.convolution_weights = Parameter(ones((3, 3)))
-        """ YOUR CODE HERE """
 
+        input_size = 26 * 26
+        hidden_size = 200
+
+        self.w1 = Parameter(tensor([
+            [0.02 * (((i + 3 * j) % 17) - 8) for j in range(hidden_size)]
+            for i in range(input_size)
+        ]))
+        self.b1 = Parameter(zeros((1, hidden_size)))
+        self.w2 = Parameter(tensor([
+            [0.02 * (((i + 5 * j) % 19) - 9) for j in range(output_size)]
+            for i in range(hidden_size)
+        ]))
+        self.b2 = Parameter(zeros((1, output_size)))
 
     def forward(self, x):
-        """
-        The convolutional layer is already applied, and the output is flattened for you. You should treat x as
-        a regular 1-dimensional datapoint now, similar to the previous questions.
-        """
         x = x.reshape(len(x), 28, 28)
         x = stack(
             list(map(lambda sample: Convolve(sample, self.convolution_weights), x))
         )
         x = x.flatten(start_dim=1)
-        """ YOUR CODE HERE """
+
+        x = relu(matmul(x, self.w1) + self.b1)
+        x = matmul(x, self.w2) + self.b2
+        return x
 
 
 class Attention(Module):
@@ -291,6 +292,3 @@ class Attention(Module):
         Take a look at the "dim" argument of torch.nn.functional.softmax to figure out how to do this.
         """
         B, T, C = input.size()
-
-        """YOUR CODE HERE"""
-
