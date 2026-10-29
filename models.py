@@ -85,8 +85,12 @@ class RegressionModel(Module):
 
     def __init__(self):
         # Initialize your model parameters here
-        "*** YOUR CODE HERE ***"
         super().__init__()
+        self.fc1 = Linear(1, 128)
+        self.fc2 = Linear(128, 128)
+        self.fc3 = Linear(128, 1)
+
+
    
 
     def forward(self, x):
@@ -98,7 +102,9 @@ class RegressionModel(Module):
         Returns:
             A node with shape (batch_size x 1) containing predicted y-values
         """
-        "*** YOUR CODE HERE ***"
+        x = relu(self.fc1(x))
+        x = relu(self.fc2(x))
+        return self.fc3(x)
 
 
 class DigitClassificationModel(Module):
