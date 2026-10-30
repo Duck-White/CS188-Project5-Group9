@@ -164,10 +164,14 @@ class LanguageIDModel(Module):
         # combined alphabets of the five languages contain a total of 47 unique
         # characters.
         # You can refer to self.num_chars or len(self.languages) in your code
+        super().__init__()
         self.num_chars = 47
         self.languages = ["English", "Spanish", "Finnish", "Dutch", "Polish"]
-        super(LanguageIDModel, self).__init__()
-        "*** YOUR CODE HERE ***"
+        self.hidden_size = 256
+        self.input_layer = Linear(self.num_chars, self.hidden_size)
+        self.hidden_layer = Linear(self.hidden_size, self.hidden_size, bias=False)
+        self.fc1 = Linear(self.hidden_size, 128)
+        self.fc2 = Linear(128, len(self.languages))
         # Initialize your model parameters here
 
 
@@ -201,7 +205,13 @@ class LanguageIDModel(Module):
             A node with shape (batch_size x 5) containing predicted scores
                 (also called logits)
         """
-        "*** YOUR CODE HERE ***"
+        hidden = xs[0].new_zeros((xs[0].shape[0], self.hidden_size))
+        for x in xs:
+            candidate = relu(self.input_layer(x) + self.hidden_layer(hidden))
+            # A zero row is padding, so keep the previous hidden state.
+            active = (x.sum(dim=1, keepdim=True) != 0).to(hidden.dtype)
+            hidden = active * candidate + (1 - active) * hidden
+        return self.fc2(relu(self.fc1(hidden)))
 
 
 
