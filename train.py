@@ -67,8 +67,31 @@ def train_digitclassifier(model, dataset):
     """
     Trains the model.
     """
-    model.train()
-    """ YOUR CODE HERE """
+    dataloader = DataLoader(dataset, batch_size=100, shuffle=True)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    best_accuracy = -1
+    best_state = None
+    for epoch in range(20):
+        model.train()
+        for batch in dataloader:
+            optimizer.zero_grad()
+            loss = digitclassifier_loss(model(batch["x"]), batch["label"])
+            loss.backward()
+            optimizer.step()
+        model.eval()
+        with no_grad():
+            accuracy = dataset.get_validation_accuracy()
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            best_state = {name: value.detach().clone() for name, value in model.state_dict().items()}
+        print(
+            f"[Q3] Epoch {epoch + 1}/20 | validation = {accuracy:.2%} | best = {best_accuracy:.2%}",
+            flush=True,
+        )
+        if epoch >= 4 and best_accuracy >= 0.98:
+            break
+    model.load_state_dict(best_state)
+    model.eval()
 
 
 def train_languageid(model, dataset):
