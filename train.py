@@ -73,8 +73,54 @@ def train_languageid(model, dataset):
 
     For more information, look at the pytorch documentation of torch.movedim()
     """
-    model.train()
-    "*** YOUR CODE HERE ***"
+    dataloader = DataLoader(dataset, batch_size=128, shuffle=True)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    best_accuracy = -1
+    best_state = None
+    for epoch in range(40):
+        model.train()
+        if epoch == 20:
+            for group in optimizer.param_groups:
+                group["lr"] = 0.0003
+        for batch_index, batch in enumerate(dataloader, start=1):
+            xs = movedim(batch["x"], 0, 1)
+            optimizer.zero_grad()
+            loss = languageid_loss(model(xs), batch["label"])
+            loss.backward()
+            with no_grad():
+                for parameter in model.parameters():
+                    if parameter.grad is not None:
+                        parameter.grad.clamp_(-1, 1)
+            optimizer.step()
+            if batch_index == 1 or batch_index % 50 == 0:
+                print(
+                    f"[Q4] Epoch {epoch + 1}/40 | batch {batch_index}/{len(dataloader)} | loss = {loss.item():.4f}",
+                    flush=True,
+                )
+        model.eval()
+        with no_grad():
+            # Use dev explicitly: the backend's validation helper defaults to test.
+            correct = 0
+            total = 0
+            for start, end in dataset.dev_buckets:
+                dev_xs, dev_labels = dataset._encode(
+                    dataset.dev_x[start:end], dataset.dev_y[start:end]
+                )
+                predicted = model(dev_xs).argmax(dim=1)
+                correct += (predicted == dev_labels.argmax(dim=1)).sum().item()
+                total += len(dev_labels)
+            accuracy = correct / total
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            best_state = {name: value.detach().clone() for name, value in model.state_dict().items()}
+        print(
+            f"[Q4] Epoch {epoch + 1}/40 | dev accuracy = {accuracy:.2%} | best = {best_accuracy:.2%}",
+            flush=True,
+        )
+        if epoch >= 9 and best_accuracy >= 0.85:
+            break
+    model.load_state_dict(best_state)
+    model.eval()
 
 
 
