@@ -292,3 +292,16 @@ class Attention(Module):
         Take a look at the "dim" argument of torch.nn.functional.softmax to figure out how to do this.
         """
         B, T, C = input.size()
+
+        keys = self.k_layer(input)
+        queries = self.q_layer(input)
+        values = self.v_layer(input)
+
+        attention_scores = matmul(queries, movedim(keys, 1, 2))
+        attention_scores = attention_scores / (C ** 0.5)
+        attention_scores = attention_scores.masked_fill(
+            self.mask[:, :, :T, :T] == 0,
+            float("-inf"),
+        )[0]
+        attention_weights = softmax(attention_scores, dim=-1)
+        return matmul(attention_weights, values)
