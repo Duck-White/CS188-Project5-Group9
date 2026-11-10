@@ -1,4 +1,4 @@
-from torch import no_grad, movedim
+﻿from torch import no_grad, movedim
 from torch.utils.data import DataLoader
 from models import PerceptronModel, RegressionModel, DigitClassificationModel, LanguageIDModel, DigitConvolutionalModel
 from losses import regression_loss, digitclassifier_loss, languageid_loss, digitconv_loss
@@ -71,7 +71,6 @@ def train_languageid(model, dataset):
 
 
 def train_digitconv(model, dataset):
-    model.train()
     "*** YOUR CODE HERE ***"
     dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -83,5 +82,3 @@ def train_digitconv(model, dataset):
             optimizer.step()
         if dataset.get_validation_accuracy() >= 0.82:
             break
-
-train_digitconvolution = train_digitconv

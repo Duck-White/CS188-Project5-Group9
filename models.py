@@ -121,6 +121,8 @@ class DigitConvolutionalModel(Module):
         x = relu(self.fc1(x))
         return self.fc2(x)
 
+DigitConvModel = DigitConvolutionalModel
+
 
 class Attention(Module):
     def __init__(self, layer_size, block_size):
@@ -141,8 +143,7 @@ class Attention(Module):
         k = self.k_layer(input)
         v = self.v_layer(input)
 
-        scores = matmul(q, k.transpose(-2, -1)) / (self.layer_size ** 0.5)
+        scores = matmul(k, q.transpose(-2, -1)) / (self.layer_size ** 0.5)
         scores = scores.masked_fill(self.mask[:, :, :T, :T] == 0, float("-inf"))[0]
         weights = softmax(scores, dim=-1)
         return matmul(weights, v)
-

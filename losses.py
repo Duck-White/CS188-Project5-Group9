@@ -12,8 +12,6 @@ def languageid_loss(y_pred, y):
     "*** YOUR CODE HERE ***"
     return cross_entropy(y_pred, y)
 
-def digitconvolution_Loss(y_pred, y):
+def digitconv_loss(y_pred, y):
     "*** YOUR CODE HERE ***"
     return cross_entropy(y_pred, y)
-
-digitconv_loss = digitconvolution_Loss
