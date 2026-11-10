@@ -159,7 +159,7 @@ def train_languageid(model, dataset):
 
 
 
-def Train_DigitConvolution(model, dataset):
+def train_digitconvolution(model, dataset):
     """
     Trains the model.
     """
