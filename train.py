@@ -83,3 +83,5 @@ def train_digitconv(model, dataset):
             optimizer.step()
         if dataset.get_validation_accuracy() >= 0.82:
             break
+
+train_digitconvolution = train_digitconv

@@ -96,12 +96,8 @@ def Convolve(input: tensor, weight: tensor):
     weight_dimensions = weight.shape
     Output_Tensor = tensor(())
     "*** YOUR CODE HERE ***"
-    h_out = input_tensor_dimensions[0] - weight_dimensions[0] + 1
-    w_out = input_tensor_dimensions[1] - weight_dimensions[1] + 1
-    Output_Tensor = torch.zeros((h_out, w_out))
-    for i in range(h_out):
-        for j in range(w_out):
-            Output_Tensor[i, j] = torch.sum(input[i:i+weight_dimensions[0], j:j+weight_dimensions[1]] * weight)
+    patches = input.unfold(0, weight_dimensions[0], 1).unfold(1, weight_dimensions[1], 1)
+    Output_Tensor = (patches * weight).sum(dim=(-2, -1))
     return Output_Tensor
 
 
