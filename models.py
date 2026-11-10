@@ -1,4 +1,4 @@
-from torch import no_grad, stack
+﻿from torch import no_grad, stack
 from torch.utils.data import DataLoader
 from torch.nn import Module
 import torch
@@ -149,3 +149,4 @@ class Attention(Module):
         scores = scores.masked_fill(self.mask[:, :, :T, :T] == 0, float("-inf"))[0]
         weights = softmax(scores, dim=-1)
         return matmul(weights, v)
+
