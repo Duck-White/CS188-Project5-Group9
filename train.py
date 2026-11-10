@@ -4,7 +4,6 @@ from models import PerceptronModel, RegressionModel, DigitClassificationModel, L
 from losses import regression_loss, digitclassifier_loss, languageid_loss, digitconv_loss
 from torch import optim
 
-
 def train_perceptron(model, dataset):
     with no_grad():
         dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
@@ -19,7 +18,6 @@ def train_perceptron(model, dataset):
                     mistakes += 1
             if mistakes == 0:
                 break
-
 
 def train_regression(model, dataset):
     "*** YOUR CODE HERE ***"
@@ -38,7 +36,6 @@ def train_regression(model, dataset):
         if (total_loss / count) <= 0.012:
             break
 
-
 def train_digitclassifier(model, dataset):
     model.train()
     "*** YOUR CODE HERE ***"
@@ -52,7 +49,6 @@ def train_digitclassifier(model, dataset):
             optimizer.step()
         if dataset.get_validation_accuracy() >= 0.976:
             break
-
 
 def train_languageid(model, dataset):
     model.train()
@@ -68,7 +64,6 @@ def train_languageid(model, dataset):
             optimizer.step()
         if dataset.get_validation_accuracy() >= 0.825:
             break
-
 
 def train_digitconv(model, dataset):
     "*** YOUR CODE HERE ***"

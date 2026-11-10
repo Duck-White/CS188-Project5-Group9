@@ -3,10 +3,9 @@ from torch.utils.data import DataLoader
 from torch.nn import Module
 import torch
 from torch.nn import Parameter, Linear
-from torch import tensor, tensordot, ones, matmul
-from torch.nn.functional import relu, log_softmax, cross_entropy, softmax
+from torch import tensor, ones, matmul
+from torch.nn.functional import relu, cross_entropy, softmax
 from backend import PerceptronDataset, RegressionDataset, DigitClassificationDataset, LanguageIDDataset
-
 
 class PerceptronModel(Module):
     def __init__(self, dimensions):
@@ -28,7 +27,6 @@ class PerceptronModel(Module):
         "*** YOUR CODE HERE ***"
         return 1 if self(x).item() >= 0 else -1
 
-
 class RegressionModel(Module):
     def __init__(self):
         super().__init__()
@@ -45,7 +43,6 @@ class RegressionModel(Module):
         x = relu(self.fc1(x))
         x = relu(self.fc2(x))
         return self.fc3(x)
-
 
 class DigitClassificationModel(Module):
     def __init__(self):
@@ -65,7 +62,6 @@ class DigitClassificationModel(Module):
         x = relu(self.fc1(x))
         x = relu(self.fc2(x))
         return self.fc3(x)
-
 
 class LanguageIDModel(Module):
     def __init__(self):
@@ -90,7 +86,6 @@ class LanguageIDModel(Module):
         h = relu(self.fc2(h))
         return self.fc_out(h)
 
-
 def Convolve(input: tensor, weight: tensor):
     input_tensor_dimensions = input.shape
     weight_dimensions = weight.shape
@@ -99,7 +94,6 @@ def Convolve(input: tensor, weight: tensor):
     patches = input.unfold(0, weight_dimensions[0], 1).unfold(1, weight_dimensions[1], 1)
     Output_Tensor = (patches * weight).sum(dim=(-2, -1))
     return Output_Tensor
-
 
 class DigitConvolutionalModel(Module):
     def __init__(self):
@@ -122,7 +116,6 @@ class DigitConvolutionalModel(Module):
         return self.fc2(x)
 
 DigitConvModel = DigitConvolutionalModel
-
 
 class Attention(Module):
     def __init__(self, layer_size, block_size):
