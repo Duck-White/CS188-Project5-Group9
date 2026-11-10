@@ -115,8 +115,6 @@ class DigitConvolutionalModel(Module):
         x = relu(self.fc1(x))
         return self.fc2(x)
 
-DigitConvModel = DigitConvolutionalModel
-
 class Attention(Module):
     def __init__(self, layer_size, block_size):
         super().__init__()
