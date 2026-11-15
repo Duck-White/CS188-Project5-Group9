@@ -1,4 +1,4 @@
-from torch import stack, tril
+from torch import tril
 from torch.nn import Module
 
 
@@ -40,8 +40,7 @@ class PerceptronModel(Module):
         Hint: You can use ones(dim) to create a tensor of dimension dim.
         """
         super(PerceptronModel, self).__init__()
-
-        "*** YOUR CODE HERE ***"
+        self.w = Parameter(ones(1, dimensions))
 
 
     def get_weights(self):
@@ -60,9 +59,7 @@ class PerceptronModel(Module):
 
         The pytorch function `tensordot` may be helpful here.
         """
-        "*** YOUR CODE HERE ***"
-
-        
+        return matmul(x.to(dtype=self.w.dtype), self.w.T).squeeze(-1)
 
     def get_prediction(self, x):
         """
@@ -71,8 +68,7 @@ class PerceptronModel(Module):
         Returns: 1 or -1
         """
         score = self(x)
-
-        "*** YOUR CODE HERE ***"
+        return 1 if score.item() >= 0 else -1
 
 
 
@@ -217,25 +213,12 @@ class LanguageIDModel(Module):
 
 def Convolve(input_matrix, weight_matrix):
     """
-    Tính phép tích chập 2D giữa input_matrix (28x28) và weight_matrix (3x3)
-    Trả về Tensor 2D kích thước (26, 26)
+    Multiply a sliding window by the kernel and sum over its last two axes.
+    Leading dimensions, such as a batch dimension, are preserved.
     """
-    input_height, input_width = input_matrix.shape
     kernel_height, kernel_width = weight_matrix.shape
-
-    out_height = input_height - kernel_height + 1
-    out_width = input_width - kernel_width + 1
-
-    output_rows = []
-    for i in range(out_height):
-        row = []
-        for j in range(out_width):
-            sub_matrix = input_matrix[i : i + kernel_height, j : j + kernel_width]
-            val = (sub_matrix * weight_matrix).sum()
-            row.append(val)
-        output_rows.append(stack(row))
-
-    return stack(output_rows)
+    windows = input_matrix.unfold(-2, kernel_height, 1).unfold(-2, kernel_width, 1)
+    return (windows * weight_matrix).sum(dim=(-2, -1))
 
 
 class DigitConvolutionalModel(Module):
@@ -265,9 +248,7 @@ class DigitConvolutionalModel(Module):
 
     def forward(self, x):
         x = x.reshape(len(x), 28, 28)
-        x = stack(
-            list(map(lambda sample: Convolve(sample, self.convolution_weights), x))
-        )
+        x = Convolve(x, self.convolution_weights)
         x = x.flatten(start_dim=1)
 
         x = relu(matmul(x, self.w1) + self.b1)

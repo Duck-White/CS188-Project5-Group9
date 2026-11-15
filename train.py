@@ -28,9 +28,20 @@ def train_perceptron(model, dataset):
     Each sample in the dataloader is in the form {'x': features, 'label': label} where label
     is the item we need to predict based off of its features.
     """
+    dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
+    weights = model.get_weights()
     with no_grad():
-        dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
-        "*** YOUR CODE HERE ***"
+        for _ in range(10_000):
+            made_mistake = False
+            for batch in dataloader:
+                features = batch["x"]
+                label = batch["label"].item()
+                if model.get_prediction(features) != label:
+                    weights.add_(features, alpha=label)
+                    made_mistake = True
+            if not made_mistake:
+                return
+    raise RuntimeError("Perceptron did not converge within 10000 epochs.")
 
 
 def train_regression(model, dataset):
@@ -159,7 +170,7 @@ def train_languageid(model, dataset):
 
 
 
-def train_digitconvolution(model, dataset):
+def Train_DigitConvolution(model, dataset):
     """
     Trains the model.
     """
@@ -174,3 +185,7 @@ def train_digitconvolution(model, dataset):
             loss = digitconvolution_Loss(predictions, batch['label'].float())
             loss.backward()
             optimizer.step()
+
+
+# Keep the lowercase spelling used in the project instructions and on main.
+train_digitconvolution = Train_DigitConvolution
