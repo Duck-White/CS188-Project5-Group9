@@ -41,7 +41,7 @@ class PerceptronModel(Module):
         """
         super(PerceptronModel, self).__init__()
 
-        "*** YOUR CODE HERE ***"
+        self.w = Parameter(ones(1, dimensions))
 
 
     def get_weights(self):
@@ -55,14 +55,10 @@ class PerceptronModel(Module):
         Calculates the score assigned by the perceptron to a data point x.
 
         Inputs:
-            x: a node with shape (dimensions)
-        Returns: a node containing a single number (the score)
-
-        The pytorch function `tensordot` may be helpful here.
+            x: a tensor of shape (dimensions,) or (batch_size, dimensions)
+        Returns: a tensor with one score per input
         """
-        "*** YOUR CODE HERE ***"
-
-        
+        return matmul(x, self.w[0])
 
     def get_prediction(self, x):
         """
@@ -70,9 +66,7 @@ class PerceptronModel(Module):
 
         Returns: 1 or -1
         """
-        score = self(x)
-
-        "*** YOUR CODE HERE ***"
+        return 1 if self(x).item() >= 0 else -1
 
 
 
