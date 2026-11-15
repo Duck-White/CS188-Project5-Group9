@@ -185,3 +185,7 @@ def train_digitconvolution(model, dataset):
             loss = digitconvolution_Loss(predictions, batch['label'].float())
             loss.backward()
             optimizer.step()
+
+
+# Entry point expected by the Q5 autograder.
+Train_DigitConvolution = train_digitconvolution

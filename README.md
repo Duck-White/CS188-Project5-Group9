@@ -34,7 +34,7 @@ Dữ liệu `data/mnist.npz` dùng cho Q3 và Q5. Q4 dùng `data/lang_id.npz`. C
 
 ## Kết quả kiểm thử trên main
 
-Lượt chấm cả sáu câu dùng CPU, seed 0 và Python 3.12.14. [Bản mã trên main được kiểm thử](https://github.com/Duck-White/CS188-Project5-Group9/commit/915baf949497da79825f44c6838c5a6c12244ce4)
+Lượt chấm cả sáu câu sau khi khớp tên hàm Q5 dùng CPU, seed 0 và Python 3.12.14.
 
 | Câu | Điểm | Kết quả |
 |---|---:|---|
@@ -42,11 +42,11 @@ Lượt chấm cả sáu câu dùng CPU, seed 0 và Python 3.12.14. [Bản mã t
 | Q2 | 5/5 | MSE train 0,003455 |
 | Q3 | 5/5 | Dev tốt nhất 98,00%, test 97,82% |
 | Q4 | 5/5 | Dev tốt nhất 91,00%, test 90,00% |
-| Q5 | 1/3 | Qua kiểm tra tích chập. Autograder gọi `Train_DigitConvolution`, còn hàm trong `main` có tên `train_digitconvolution` |
+| Q5 | 3/3 | Đúng 50/50 ảnh trên tập test mà Autograder Q5 sử dụng |
 | Q6 | 2/2 | Qua kiểm tra đầu ra attention |
-| **Tổng** | **23/25** | |
+| **Tổng** | **25/25** | |
 
-Bản thử cục bộ thêm dòng `Train_DigitConvolution = train_digitconvolution` trong `train.py` đạt **25/25**.
+Trong `train.py`, tên `Train_DigitConvolution` mà Autograder Q5 gọi trỏ tới hàm huấn luyện `train_digitconvolution`.
 
 ## Tệp nguồn
 
