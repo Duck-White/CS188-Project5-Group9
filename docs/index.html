@@ -1,89 +1,81 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="CS188 Project 5 Fall 2025: website chạy mô hình PyTorch thật cho Q1–Q6, Nhóm 9 INT3401_11." />
-  <title>CS188 · Project 5 | ML Lab — Nhóm 9</title>
-  <link rel="stylesheet" href="assets/style.css" />
-  <script src="assets/app.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nhóm 9 — CS188 Project 5 | Demo Q1–Q6</title>
+  <style>
+    :root{font-family:Arial,Helvetica,sans-serif;color:#202124;background:#fafafa;font-size:15px}
+    *{box-sizing:border-box}body{margin:0}.container{max-width:940px;padding:20px;margin:auto}
+    header{border-bottom:1px solid #ddd;background:#fff}h1{font-size:25px;margin:0 0 7px}h2{font-size:21px;margin:0 0 8px}h3{font-size:17px}
+    p{line-height:1.55}.muted{color:#555}.small{font-size:13px}.note{background:#f3f5f6;border-left:3px solid #70757a;padding:10px 13px;margin:15px 0}
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:17px 0}.tabs button{padding:9px 14px;background:white;border:1px solid #aaa;border-radius:4px;color:#222}
+    .tabs button.active{background:#174ea6;color:#fff;border-color:#174ea6}
+    .panel{background:white;border:1px solid #ddd;padding:22px;border-radius:5px;min-height:270px}
+    button.action{background:#1a73e8;color:white;border:0;border-radius:4px;padding:10px 14px;margin:8px 8px 8px 0}
+    button.secondary{background:white;border:1px solid #aaa;color:#202124;border-radius:4px;padding:9px 14px;margin-right:8px}
+    button:disabled{opacity:.55;cursor:not-allowed}input[type=text]{padding:11px;border:1px solid #aaa;border-radius:4px;width:min(400px,100%)}
+    .output{background:#f8f9fa;border:1px solid #e1e3e4;padding:12px;min-height:42px;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:3px;font:13px/1.45 Consolas,monospace;margin-top:12px}
+    canvas{max-width:100%;border:1px solid #c5c9cc;touch-action:none;image-rendering:pixelated}
+    .flex{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}.flex>*{flex:none}.pixnote{max-width:250px;line-height:1.6}
+    table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:9px;text-align:left}th{background:#f3f4f6}
+    .matrix{display:grid;grid-template-columns:repeat(var(--n,4),max-content);gap:3px;margin:14px 0}
+    .cell{padding:8px 11px;text-align:center;background:#edf3fc;border:1px solid #d1d8e4;min-width:35px}.cell.mask{background:#f1f1f1;color:#777}
+    footer{color:#555;font-size:13px;margin-top:30px;border-top:1px solid #ddd;padding-top:15px}
+    @media(max-width:600px){.container{padding:14px}.panel{padding:14px}.tabs button{flex:1;min-width:86px}.flex{gap:10px}}
+  </style>
 </head>
 <body>
-  <div class="shell">
-    <aside class="sidebar">
-      <a class="brand" href="#overview" aria-label="Project 5 home"><span class="brandmark">P<span>5</span></span><span class="brandname">CS188 <small>MACHINE LEARNING</small></span></a>
-      <div class="sidebar-label">KHÔNG GIAN BÀI TẬP</div>
-      <nav class="sidenav" aria-label="Điều hướng câu hỏi">
-        <a href="#overview" data-nav="overview" class="selected"><span class="nav-icon">▦</span> Tổng quan</a>
-        <a href="#q1" data-nav="q1"><span class="nav-id">01</span> Perceptron <span class="nav-pts">5đ</span></a>
-        <a href="#q2" data-nav="q2"><span class="nav-id">02</span> Regression <span class="nav-pts">5đ</span></a>
-        <a href="#q3" data-nav="q3"><span class="nav-id">03</span> Digit Classifier <span class="nav-pts">5đ</span></a>
-        <a href="#q4" data-nav="q4"><span class="nav-id">04</span> Language ID <span class="nav-pts">5đ</span></a>
-        <a href="#q5" data-nav="q5"><span class="nav-id">05</span> Convolution <span class="nav-pts">3đ</span></a>
-        <a href="#q6" data-nav="q6"><span class="nav-id">06</span> Attention <span class="nav-pts">2đ</span></a>
-      </nav>
-      <div class="sidebar-label bottom-label">TÀI NGUYÊN</div>
-      <nav class="sidenav"><a href="#testing"><span class="nav-icon">⌘</span> Chạy Autograder</a><a href="#source"><span class="nav-icon">⌁</span> Mã nguồn &amp; cài đặt</a></nav>
-      <div class="sidebar-bottom"><div class="connection"><span id="connection-dot" class="status-dot"></span><span id="connection-text">Đang kiểm tra PyTorch…</span></div><small>INT3401_11 · Nhóm 9</small></div>
-    </aside>
-    <main class="main">
-      <header class="topbar"><div class="crumb">ĐẠI HỌC / CS188 <span>/</span> PROJECT 05</div><div class="top-right"><span class="academic">UC BERKELEY • FALL 2025</span><a class="github-pill" href="https://github.com/Duck-White/CS188-Project5-Group9" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></header>
-      <div class="content">
-        <section id="overview" class="hero reveal">
-          <div class="hero-orbit" aria-hidden="true"><div class="orb-ring orb-one"></div><div class="orb-ring orb-two"></div><div class="orb-center">ML</div></div>
-          <div class="eyebrow"><span class="eyebrow-dot"></span> PROJECT 5 / MACHINE LEARNING</div>
-          <h1>Hiểu thuật toán.<br /><span>Chạy đúng mô hình.</span></h1>
-          <p class="hero-description">Sáu bài tập chính thức của <strong>CS188 Fall 2025</strong> — từ Perceptron đến Causal Attention. Giao diện gọi trực tiếp code PyTorch của Nhóm 9; không sinh dự đoán giả khi thiếu trọng số đã huấn luyện.</p>
-          <div class="hero-actions"><a class="primary-btn" href="#q1">Bắt đầu Q1 <span>↗</span></a><a class="secondary-btn" href="#testing">Xem cách chấm bài <span>→</span></a></div>
-        </section>
-        <div class="stats-grid" aria-label="Tổng quan dự án"><div class="stat"><div class="stat-icon violet">✦</div><div><strong>06</strong><span>Câu thực hiện · Q1–Q6</span></div></div><div class="stat"><div class="stat-icon aqua">∑</div><div><strong>25</strong><span>Điểm tối đa theo đề</span></div></div><div class="stat"><div class="stat-icon amber">≋</div><div><strong>03</strong><span>File Python bắt buộc nộp</span></div></div><div class="stat"><div class="stat-icon green">✓</div><div><strong>PyTorch</strong><span>Mô hình thật trên máy</span></div></div></div>
-        <div class="notice important"><div class="notice-icon">i</div><div><strong>Đúng phạm vi yêu cầu Berkeley.</strong> Bài nộp chính thức là <code>models.py</code>, <code>train.py</code>, <code>losses.py</code>. Website này là công cụ trình bày/kiểm thử bổ sung, không thay thế <code>autograder.py</code>. <a href="https://inst.eecs.berkeley.edu/~cs188/archive/fa25/projects/proj5/" target="_blank" rel="noopener noreferrer">Xem đề bài gốc ↗</a></div></div>
-        <div class="section-heading"><div><span class="overline">BÀI TẬP CHÍNH THỨC</span><h2>Thực hành Q1–Q6</h2><p>Mỗi thí nghiệm sử dụng class hoặc hàm có thật trong mã nguồn của nhóm.</p></div><span class="section-count">6 QUESTIONS · 25 POINTS</span></div>
-        <section id="q1" class="question-card" data-question="q1">
-          <div class="question-top"><div class="question-index">01<span>/06</span></div><div class="question-title"><span class="overline">5 POINTS · BINARY CLASSIFICATION</span><h3>Perceptron</h3><p>Huấn luyện bộ phân loại nhị phân (+1 / −1), cập nhật <code>w ← w + yx</code> khi dự đoán sai, hội tụ 100% trên tập huấn luyện.</p></div><span class="question-tag">models.PerceptronModel</span></div>
-          <div class="question-body split"><div class="demo-column"><div class="demo-head"><span>Ranh giới phân loại</span><span class="live-label">LIVE PYTORCH</span></div><canvas id="q1-plot" width="660" height="330" class="plot" role="img" aria-label="Đồ thị phân loại Perceptron"></canvas><div class="demo-actions"><button id="run-q1" class="action-btn">Huấn luyện Q1 <span>↗</span></button><span class="hint" id="q1-state">12 mẫu minh họa khả phân tuyến tính</span></div></div><div class="info-column"><div class="info-heading">YÊU CẦU ĐỀ BÀI</div><dl class="spec"><div><dt>Đầu vào</dt><dd>x: (batch, dimensions)</dd></div><div><dt>Đầu ra</dt><dd>y ∈ {−1, +1}</dd></div><div><dt>Tiêu chí</dt><dd>Train accuracy = 100%</dd></div><div><dt>Chấm thử</dt><dd><code>python autograder.py -q q1</code></dd></div></dl><div id="q1-result" class="result muted">Bấm “Huấn luyện Q1” để gọi trực tiếp <code>train_perceptron</code>.</div></div></div>
-        </section>
-        <section id="q2" class="question-card" data-question="q2">
-          <div class="question-top"><div class="question-index">02<span>/06</span></div><div class="question-title"><span class="overline">5 POINTS · NON-LINEAR REGRESSION</span><h3>Hồi quy phi tuyến</h3><p>MLP dự đoán <code>sin(x)</code> trên [−2π, 2π] với <code>mse_loss</code>. Đề yêu cầu MSE không vượt quá 0,02.</p></div><span class="question-tag">models.RegressionModel</span></div>
-          <div class="question-body split"><div class="demo-column"><div class="demo-head"><span>Đường cong sin(x) &amp; dự đoán</span><span class="legend"><i class="legend-true"></i> Giá trị thật <i class="legend-pred"></i> MLP</span></div><canvas id="q2-plot" width="660" height="300" class="plot" role="img" aria-label="Đồ thị hồi quy sin"></canvas><div class="demo-actions"><button id="run-q2" class="action-btn">Huấn luyện demo <span>↗</span></button><span id="q2-state" class="hint">Sử dụng 200 điểm sin(x) mẫu</span></div></div><div class="info-column"><div class="info-heading">YÊU CẦU ĐỀ BÀI</div><dl class="spec"><div><dt>Kiến trúc nhóm</dt><dd>1 → 128 → 128 → 1 (ReLU)</dd></div><div><dt>Đầu ra</dt><dd>(batch_size, 1)</dd></div><div><dt>Loss</dt><dd>Mean Squared Error</dd></div><div><dt>Ngưỡng</dt><dd>MSE ≤ 0,02</dd></div></dl><div id="q2-result" class="result muted">MSE trên dữ liệu demo được hiển thị riêng, không phải điểm autograder.</div></div></div>
-        </section>
-        <section id="q3" class="question-card" data-question="q3">
-          <div class="question-top"><div class="question-index">03<span>/06</span></div><div class="question-title"><span class="overline">5 POINTS · MNIST CLASSIFICATION</span><h3>Phân loại chữ số</h3><p>MLP nhận ảnh MNIST 28×28 (784 đặc trưng), trả về 10 logits cho chữ số 0–9. Không dùng ReLU ở lớp đầu ra.</p></div><span class="question-tag">models.DigitClassificationModel</span></div>
-          <div class="question-body split"><div class="demo-column"><div class="demo-head"><span>Vẽ chữ số trên ô 28×28</span><span class="live-label" id="q3-status">CẦN CHECKPOINT</span></div><div class="digit-layout"><canvas id="digit-q3" width="280" height="280" class="digit-pad" role="img" aria-label="Vẽ chữ số Q3 bằng chuột hoặc cảm ứng"></canvas><div class="digit-tools"><div><strong>0—9</strong><span>Đầu vào grayscale<br />28×28 → 784</span></div><button class="light-btn" data-clear="q3">Xóa hình ↺</button><button id="run-q3" class="action-btn">Nhận diện số ↗</button></div></div></div><div class="info-column"><div class="info-heading">YÊU CẦU ĐỀ BÀI</div><dl class="spec"><div><dt>Kiến trúc nhóm</dt><dd>784 → 256 → 128 → 10</dd></div><div><dt>Loss</dt><dd>Cross entropy (one-hot)</dd></div><div><dt>Ngưỡng</dt><dd>Test accuracy ≥ 97%</dd></div><div><dt>Trọng số</dt><dd><code>checkpoints/q3.pt</code></dd></div></dl><div id="q3-result" class="result muted">Cần checkpoint huấn luyện thật để dự đoán. Không sử dụng trọng số ngẫu nhiên.</div></div></div>
-        </section>
-        <section id="q4" class="question-card" data-question="q4">
-          <div class="question-top"><div class="question-index">04<span>/06</span></div><div class="question-title"><span class="overline">5 POINTS · RECURRENT NEURAL NETWORK</span><h3>Nhận diện ngôn ngữ</h3><p>RNN xử lý chuỗi ký tự one-hot từ bộ 47 ký tự, dự đoán một trong năm ngôn ngữ của đề.</p></div><span class="question-tag">models.LanguageIDModel</span></div>
-          <div class="question-body split"><div class="demo-column"><div class="demo-head"><span>Nhập một từ để phân loại</span><span class="live-label" id="q4-status">CẦN CHECKPOINT</span></div><label class="field-label" for="q4-word">TỪ CẦN NHẬN DIỆN</label><div class="word-form"><input type="text" maxlength="32" id="q4-word" autocomplete="off" spellcheck="false" value="hello" placeholder="Ví dụ: hello"/><button id="run-q4" class="action-btn">Nhận diện ↗</button></div><div class="language-pills"><span>English</span><span>Spanish</span><span>Finnish</span><span>Dutch</span><span>Polish</span></div><div id="q4-bars" class="prob-list"></div></div><div class="info-column"><div class="info-heading">YÊU CẦU ĐỀ BÀI</div><dl class="spec"><div><dt>Đầu vào</dt><dd>(word_length, batch, 47)</dd></div><div><dt>Đầu ra</dt><dd>(batch_size, 5) logits</dd></div><div><dt>Loss</dt><dd>Cross entropy</dd></div><div><dt>Ngưỡng</dt><dd>Test accuracy ≥ 81%</dd></div></dl><div id="q4-result" class="result muted">Cần <code>q4.pt</code> và bảng chữ cái <code>lang_id.npz</code> hoặc <code>q4_chars.json</code>.</div></div></div>
-        </section>
-        <section id="q5" class="question-card" data-question="q5">
-          <div class="question-top"><div class="question-index">05<span>/06</span></div><div class="question-title"><span class="overline">3 POINTS · CONVOLUTIONAL NETWORK</span><h3>Convolution / CNN</h3><p>Cài đặt <code>Convolve</code> bằng các phép tensor được phép, sau đó phân loại MNIST rút gọn với <code>DigitConvolutionalModel</code>.</p></div><span class="question-tag">models.Convolve</span></div>
-          <div class="question-body"><div class="q5-grid"><div><div class="demo-head"><span>Kiểm tra tích chập 2D thật</span><span class="live-label">LIVE PYTORCH</span></div><div class="matrix-form"><div><label class="field-label" for="conv-image">ẢNH ĐẦU VÀO (5×5)</label><textarea id="conv-image" rows="6" spellcheck="false">0 0 1 0 0
-0 1 1 1 0
-1 1 1 1 1
-0 1 1 1 0
-0 0 1 0 0</textarea></div><div><label class="field-label" for="conv-kernel">KERNEL (3×3)</label><textarea id="conv-kernel" rows="4" spellcheck="false">1 0 -1
-1 0 -1
-1 0 -1</textarea></div></div><div class="demo-actions"><button id="run-conv" class="action-btn">Tính Convolve ↗</button><span class="hint">stride 1 · no padding · no flip</span></div><div id="conv-result" class="matrix-result">Kết quả sẽ xuất hiện tại đây.</div></div><div><div class="demo-head"><span>Phân loại ảnh MNIST (CNN)</span><span class="live-label" id="q5-status">CẦN CHECKPOINT</span></div><div class="digit-layout compact"><canvas id="digit-q5" width="280" height="280" class="digit-pad" role="img" aria-label="Vẽ chữ số Q5"></canvas><div class="digit-tools"><div><strong>28×28</strong><span>Ảnh grayscale</span></div><button class="light-btn" data-clear="q5">Xóa hình ↺</button><button id="run-q5" class="action-btn">Nhận diện ↗</button></div></div><div id="q5-result" class="result muted">Cần checkpoint <code>checkpoints/q5.pt</code> để dự đoán.</div></div></div><div class="q5-spec">Đề yêu cầu <strong>Convolve đúng</strong> và <strong>test accuracy ≥ 80%</strong> trên MNIST rút gọn. Mô hình Q5 dùng kernel 3×3 và đầu ra 26×26 trước lớp phân loại.</div></div>
-        </section>
-        <section id="q6" class="question-card" data-question="q6">
-          <div class="question-top"><div class="question-index">06<span>/06</span></div><div class="question-title"><span class="overline">2 POINTS · SCALED DOT-PRODUCT ATTENTION</span><h3>Causal Attention</h3><p>Tính <code>softmax(mask(QKᵀ/√d))V</code>, ngăn token nhìn thấy thông tin ở vị trí tương lai.</p></div><span class="question-tag">models.Attention</span></div>
-          <div class="question-body split"><div class="demo-column"><div class="demo-head"><span>Trọng số attention</span><span class="live-label">LIVE PYTORCH</span></div><div class="attn-layout"><div id="attention-grid" class="attention-grid"><div class="attn-empty">Bấm tính để xem ma trận</div></div><div class="attention-legend"><span>Past / current</span><span class="gradient-bar"></span><span>High weight</span></div></div><div class="demo-actions"><button id="run-q6" class="action-btn">Tính Attention ↗</button><span class="hint">4 token × 4 đặc trưng</span></div></div><div class="info-column"><div class="info-heading">YÊU CẦU ĐỀ BÀI</div><dl class="spec"><div><dt>Đầu vào</dt><dd>(batch, T, layer_size)</dd></div><div><dt>Đầu ra</dt><dd>(batch, T, layer_size)</dd></div><div><dt>Causal mask</dt><dd>Chỉ nhìn vị trí j ≤ i</dd></div><div><dt>Kiểm tra</dt><dd><code>python autograder.py -q q6</code></dd></div></dl><div id="q6-result" class="result muted">Trọng số linear khởi tạo bằng seed cố định để minh họa <em>forward</em>, không phải mô hình đã huấn luyện.</div></div></div>
-        </section>
-        <section id="testing" class="bottom-section"><div class="section-heading"><div><span class="overline">VERIFICATION</span><h2>Kiểm thử đúng chuẩn CS188</h2><p>Điểm được xác nhận bằng bộ chấm gốc trên dữ liệu chính thức, không phải bằng giao diện web.</p></div></div><div class="test-layout"><div class="terminal"><div class="terminal-head"><div><i></i><i></i><i></i></div><span>Terminal · project root</span></div><pre><span class="comment"># Chấm tất cả 6 câu</span>
-python autograder.py --no-graphics
-
-<span class="comment"># Hoặc chạy riêng từng câu</span>
-python autograder.py -q q1 --no-graphics
-python autograder.py -q q2 --no-graphics
-python autograder.py -q q3 --no-graphics
-python autograder.py -q q4 --no-graphics
-python autograder.py -q q5 --no-graphics
-python autograder.py -q q6 --no-graphics</pre></div><div class="score-table"><div class="score-table-head"><span>NGƯỠNG ĐỀ BÀI</span><span>ĐIỂM</span></div><div><span>Q1 · Train accuracy 100%</span><strong>5</strong></div><div><span>Q2 · MSE ≤ 0.02</span><strong>5</strong></div><div><span>Q3 · Test accuracy ≥ 97%</span><strong>5</strong></div><div><span>Q4 · Test accuracy ≥ 81%</span><strong>5</strong></div><div><span>Q5 · Convolve + accuracy ≥ 80%</span><strong>3</strong></div><div><span>Q6 · Causal attention đúng</span><strong>2</strong></div><div class="total"><span>TỔNG ĐIỂM TỐI ĐA</span><strong>25</strong></div></div></div><p class="result-note"><strong>Lưu ý về kết quả Nhóm 9:</strong> Nhật ký hai seed của bản trước tối ưu ghi 25/25. Sau khi tối ưu Q5, mới chạy lại autograder Q1 5/5, Q2 5/5, Q6 2/2; Q3–Q5 phải chạy lại trên dữ liệu chính thức để xác nhận.</p></section>
-        <section id="source" class="bottom-section source-section"><div class="section-heading"><div><span class="overline">SOURCE &amp; DEPLOYMENT</span><h2>Cài đặt và mã nguồn</h2><p>Website chạy thực nghiệm qua FastAPI; tách biệt khỏi những file bắt buộc của bài nộp.</p></div></div><div class="source-grid"><div class="source-card"><span class="resource-num">01 / SOURCE</span><h4>Ba file cần nộp</h4><ul><li><code>models.py</code> — kiến trúc Q1–Q6</li><li><code>train.py</code> — vòng huấn luyện Q1–Q5</li><li><code>losses.py</code> — MSE / Cross-Entropy</li></ul><a href="https://github.com/Duck-White/CS188-Project5-Group9" target="_blank" rel="noopener noreferrer">GitHub Nhóm 9 ↗</a></div><div class="source-card"><span class="resource-num">02 / LOCAL WEB</span><h4>Chạy website thật</h4><pre>pip install -r requirements-web.txt
-python -m uvicorn webapp.server:app --port 8000</pre><small>Mở <strong>http://127.0.0.1:8000</strong>. Muốn Q3/Q4/Q5 dự đoán, cần huấn luyện và lưu checkpoint.</small></div></div></section>
-        <footer class="footer"><span>CS188 PROJECT 5 · FALL 2025 · NHÓM 9 — INT3401_11</span><span>Q1—Q6 ONLY / PYTORCH</span></footer>
-      </div>
-    </main>
-  </div>
-</body>
-</html>
+<header><div class="container"><h1>CS188 Project 5 — Machine Learning</h1><div class="muted">Nhóm 9 · INT3401_11 · Q1–Q6 (Fall 2025)</div></div></header>
+<main class="container">
+  <p>Demo tập trung vào 6 bài của Project 5. <a href="https://github.com/Duck-White/CS188-Project5-Group9">Mã nguồn GitHub</a> · <a href="https://inst.eecs.berkeley.edu/~cs188/archive/fa25/projects/proj5/">Đề gốc</a></p>
+  <div id="backend-status" class="note small" role="status">Đang kiểm tra khả năng kết nối mô hình PyTorch…</div>
+  <nav class="tabs" aria-label="Chọn câu hỏi">
+    <button data-q="q1" class="active">Q1 · Perceptron</button><button data-q="q2">Q2 · Regression</button><button data-q="q3">Q3 · MNIST</button>
+    <button data-q="q4">Q4 · Language ID</button><button data-q="q5">Q5 · Convolution</button><button data-q="q6">Q6 · Attention</button>
+  </nav>
+  <section id="demo" class="panel" aria-live="polite"></section>
+  <h2 style="margin-top:28px">Kết quả kiểm thử đã ghi nhận</h2>
+  <p class="small muted">Hai lượt 25/25 thuộc bản lưu nhật ký trước tối ưu Q5; chưa xác nhận lại Q3–Q5 của mã nguồn tối ưu với dữ liệu chính thức.</p>
+  <table><thead><tr><th>Câu</th><th>Điểm nhật ký</th><th>Nội dung</th></tr></thead><tbody>
+    <tr><td>Q1</td><td>5/5</td><td>Perceptron</td></tr><tr><td>Q2</td><td>5/5</td><td>Regression sin(x)</td></tr>
+    <tr><td>Q3</td><td>5/5</td><td>MNIST classifier</td></tr><tr><td>Q4</td><td>5/5</td><td>Language identification</td></tr>
+    <tr><td>Q5</td><td>3/3</td><td>Convolve và CNN</td></tr><tr><td>Q6</td><td>2/2</td><td>Causal self-attention</td></tr>
+  </tbody></table>
+  <footer>Đây là demo bổ sung, không thay thế việc nộp models.py, train.py, losses.py hoặc autograder Berkeley.</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id); let backend=null;
+async function api(method,url,payload){const config={method,headers:{'Content-Type':'application/json'}};if(payload!==undefined)config.body=JSON.stringify(payload);const r=await fetch(url,config);const data=await r.json().catch(()=>({}));if(!r.ok)throw Error(typeof data.detail==='string'?data.detail:`Lỗi HTTP ${r.status}`);return data;}
+async function initialize(){try{const ac=new AbortController();const timer=setTimeout(()=>ac.abort(),1800);const r=await fetch('/api/status',{signal:ac.signal});clearTimeout(timer);if(!r.ok)throw Error('no API');const v=await r.json();if(!v.backend)throw Error('not PyTorch');backend=v;$('backend-status').textContent='Chế độ PyTorch cục bộ đang chạy. Q3/Q4/Q5 phân loại chỉ dự đoán khi có checkpoint đã huấn luyện.';}catch(e){backend=null;$('backend-status').textContent='Chế độ web tĩnh: các bài đều có minh họa; Q3/Q4 có thể nhập và chuẩn bị đầu vào nhưng muốn phân loại thật cần chạy backend PyTorch kèm checkpoint.';}}
+function setQ(q){document.querySelectorAll('[data-q]').forEach(b=>{b.classList.toggle('active',b.dataset.q===q);b.setAttribute('aria-pressed',String(b.dataset.q===q));});const views={q1,q2,q3,q4,q5,q6};views[q]();}
+function txt(t){const e=document.createElement('span');e.textContent=String(t);return e.innerHTML;}
+function output(t){$('result').textContent=typeof t==='string'?t:JSON.stringify(t,null,2)}
+const drawPlot=(canvas,curves)=>{const c=canvas.getContext('2d'),W=canvas.width,H=canvas.height;c.clearRect(0,0,W,H);c.strokeStyle='#ccc';c.beginPath();c.moveTo(0,H/2);c.lineTo(W,H/2);c.stroke();curves.forEach(([values,color])=>{c.strokeStyle=color;c.lineWidth=2;c.beginPath();values.forEach((y,i)=>{const px=i*W/(values.length-1),py=H/2-y*H/4;if(i)c.lineTo(px,py);else c.moveTo(px,py)});c.stroke()})};
+function q1(){const points=[[-2,1,-1],[-1,-1,-1],[1,2,1],[1,-2,-1],[2,1,1],[2,2,1],[-2,-1,-1],[1,1,1]];let w=[-1,1,0],steps=0;
+$('demo').innerHTML='<h2>Q1 — Perceptron</h2><p>Huấn luyện phân loại nhị phân. Cập nhật trọng số khi dự đoán sai; dùng 8 điểm ví dụ.</p><button class="action" id="run">Chạy 1 epoch</button><button class="secondary" id="reset">Đặt lại</button><div id="result" class="output"></div><p class="small muted">Code: PerceptronModel, train_perceptron.</p>';
+function show(){let correct=points.filter(([x,y,l])=>(w[0]*x+w[1]*y+w[2]>=0?1:-1)===l).length;output(`w = [${w.map(x=>x.toFixed(2)).join(', ')}] | ${correct}/${points.length} đúng | cập nhật ${steps} lần${backend?'\nCó thể gọi mã PyTorch bằng nút bên dưới.':''}`)}
+$('run').onclick=()=>{for(let [x,y,label] of points){const guess=w[0]*x+w[1]*y+w[2]>=0?1:-1;if(guess!==label){w[0]+=x*label;w[1]+=y*label;w[2]+=label;steps++}}show()};$('reset').onclick=q1;show();
+if(backend){const btn=document.createElement('button');btn.className='secondary';btn.textContent='Chạy Perceptron PyTorch';btn.onclick=async()=>{try{const r=await api('POST','/api/q1',{});output(`PyTorch: accuracy = ${(r.accuracy*100).toFixed(1)}%\nTrọng số: ${r.trained_weights.map(x=>x.toFixed(3)).join(', ')}`)}catch(e){output(e.message)}}; $('run').after(btn)}}
+function q2(){$('demo').innerHTML='<h2>Q2 — Non-linear Regression</h2><p>Xấp xỉ sin(x) trên [-2π,2π], tối ưu MSE.</p><label>Hệ số minh họa a: <input id="ratio" type="range" min="-1" max="1" step="0.05" value="0.25"><b id="ratio-label"></b></label><p class="small muted">Đường xanh: sin(x). Đường cam: a·sin(x). Đây là ví dụ toán học, không phải MLP đã huấn luyện.</p><canvas id="plot" width="720" height="260"></canvas><div id="result" class="output"></div><p class="small muted">Code: RegressionModel, regression_loss, train_regression.</p>';
+function show(){const a=Number($('ratio').value);$('ratio-label').textContent=a.toFixed(2);let vals=Array.from({length:180},(_,i)=>Math.sin(-2*Math.PI+4*Math.PI*i/179));drawPlot($('plot'),[[vals,'#1664b1'],[vals.map(v=>v*a),'#ce6e22']]);output('MSE minh họa ≈ '+(0.5*(1-a)**2).toFixed(4))};$('ratio').oninput=show;show();if(backend){const b=document.createElement('button');b.className='action';b.textContent='Huấn luyện MLP PyTorch trên dữ liệu mẫu';b.onclick=async()=>{b.disabled=true;output('Đang huấn luyện trên máy...');try{const d=await api('POST','/api/q2/train',{});const curve=await api('GET','/api/q2/curve');drawPlot($('plot'),[[curve.target,'#1664b1'],[curve.prediction,'#ce6e22']]);output('PyTorch MLP: MSE mẫu = '+d.mse.toFixed(6))}catch(e){output(e.message)}finally{b.disabled=false}};$('plot').after(b)}}
+let digitCtx=null, drawing=false;
+function q3(){$('demo').innerHTML='<h2>Q3 — Digit Classification (MNIST)</h2><p>Vẽ một chữ số trắng trên nền đen. Mạng nhận đầu vào 28×28 = 784 giá trị chuẩn hóa [0,1] và phân loại thành 10 chữ số.</p><div class="flex"><canvas width="280" height="280" id="pad" aria-label="Bảng vẽ chữ số 28 nhân 28"></canvas><div class="pixnote"><canvas width="140" height="140" id="preview" aria-label="Ảnh đầu vào 28 nhân 28"></canvas><p class="small">Ảnh đưa vào model là ma trận 28×28. Nét vẽ được thu nhỏ về 28 pixel và chuyển về vector 784 phần tử.</p><button class="secondary" id="clear">Xóa hình</button><button class="action" id="predict">Thử phân loại Q3</button></div></div><div id="result" class="output"></div><p class="small muted">Code: DigitClassificationModel, digitclassifier_loss, train_digitclassifier. Không có checkpoint thì không trả nhãn dự đoán.</p>';
+const pad=$('pad'),c=pad.getContext('2d');c.fillStyle='#000';c.fillRect(0,0,280,280);c.strokeStyle='#fff';c.fillStyle='#fff';c.lineWidth=18;c.lineCap='round';c.lineJoin='round';let last=null;
+function pos(e){const r=pad.getBoundingClientRect();return{x:(e.clientX-r.left)*280/r.width,y:(e.clientY-r.top)*280/r.height}}
+function paint(e,start){const p=pos(e);if(start){c.beginPath();c.arc(p.x,p.y,9,0,Math.PI*2);c.fill();last=p}else if(last){c.beginPath();c.moveTo(last.x,last.y);c.lineTo(p.x,p.y);c.stroke();last=p}preview()}
+pad.onpointerdown=e=>{drawing=true;pad.setPointerCapture(e.pointerId);paint(e,true)};pad.onpointermove=e=>{if(drawing)paint(e,false)};pad.onpointerup=()=>{drawing=false;last=null};pad.onpointercancel=()=>{drawing=false;last=null};
+function getPixels(){let s=document.createElement('canvas');s.width=28;s.height=28;const sc=s.getContext('2d',{willReadFrequently:true});sc.drawImage(pad,0,0,28,28);return Array.from(sc.getImageData(0,0,28,28).data).filter((_,i)=>i%4===0).map(v=>v/255)}
+function preview(){let dest=$('preview').getContext('2d');dest.imageSmoothingEnabled=false;let x=document.createElement('canvas');x.width=28;x.height=28;const dc=x.getContext('2d');dc.drawImage(pad,0,0,28,28);dest.drawImage(x,0,0,140,140);const p=getPixels();output(`Kích thước: (1, 784)\nSố pixel sáng (>0.1): ${p.filter(v=>v>.1).length}\nMin: ${Math.min(...p).toFixed(3)} · Max: ${Math.max(...p).toFixed(3)}`)}
+$('clear').onclick=()=>{c.fillStyle='#000';c.fillRect(0,0,280,280);c.fillStyle='#fff';preview()};$('predict').onclick=async()=>{if(!backend?.q3){output('Chưa có mô hình đã huấn luyện. Để nhận dạng thật: chạy backend và tạo checkpoints/q3.pt từ dữ liệu MNIST; ở chế độ tĩnh chỉ demo bước xử lý ảnh.');return}try{const d=await api('POST','/api/q3',{pixels:getPixels()});output(`Dự đoán DigitClassificationModel: ${d.label}\nPhân bố xác suất: ${d.probabilities.map(x=>x.toFixed(3)).join(', ')}`)}catch(e){output(e.message)}};preview()}
+function q4(){$('demo').innerHTML='<h2>Q4 — Language Identification</h2><p>Mạng RNN đọc từng ký tự của từ (5 ngôn ngữ: English, Spanish, Finnish, Dutch, Polish). Mỗi bước dùng vector one-hot 47 chiều.</p><label for="word">Nhập một từ:</label> <input id="word" type="text" value="hello" maxlength="32"><button class="action" id="encode">Minh họa đầu vào</button><button class="secondary" id="predict">Dự đoán Q4</button><div id="result" class="output"></div><p class="small muted">Code: LanguageIDModel, languageid_loss, train_languageid. Mapping 47 ký tự chính thức lấy từ bộ dữ liệu lang_id.npz; web tĩnh không tự đoán vị trí one-hot.</p>';
+function val(){const word=$('word').value.trim().toLowerCase();if(!word){output('Hãy nhập một từ.');return null}if([...word].length>32){output('Từ quá dài, tối đa 32 ký tự.');return null}return word}
+function show(){const w=val();if(!w)return;const c=[...w];output(`Chuỗi: ${c.join(' → ')}\nĐộ dài L = ${c.length}\nĐầu vào RNN cho 1 từ: (${c.length}, 1, 47)\nOutput logits: (1, 5)\nKhông có bảng 47 ký tự chính thức nên chưa thể mã hóa one-hot đúng chỉ số ở web tĩnh.`)}
+$('encode').onclick=show;$('word').oninput=show;$('predict').onclick=async()=>{const word=val();if(!word)return;if(!backend?.q4){output('Chưa có Q4 đã huấn luyện hoặc bảng chữ cái. Cần checkpoints/q4.pt và checkpoints/q4_chars.json (tạo bằng export_checkpoints.py), sau đó chạy backend.');return}try{let d=await api('POST','/api/q4',{word});output(`Kết quả LanguageIDModel: ${d.language}\n${d.languages.map((x,i)=>x+': '+(d.probabilities[i]*100).toFixed(1)+'%').join('\n')}`)}catch(e){output(e.message)}};show()}
+function q5(){$('demo').innerHTML='<h2>Q5 — Convolve & CNN</h2><p>Phép cross-correlation 2D (stride 1, không padding). Ma trận 4×4 tích chập với kernel 2×2 sẽ cho đầu ra 3×3.</p><label for="weight">Hệ số kernel góc trên trái:</label> <input type="range" id="weight" min="-2" max="2" step="1" value="1"><b id="w-label"></b><button class="secondary" id="calc">Tính bằng Convolve PyTorch (nếu có)</button><div id="result" class="output"></div><p class="small muted">Code: Convolve, DigitConvolutionalModel, digitconvolution_Loss. CNN phân loại thật cần checkpoints/q5.pt.</p>';
+const img=[[0,0,1,1],[0,1,1,0],[1,1,0,0],[1,0,0,1]],slider=$('weight');function getKernel(){return[[Number(slider.value),0],[0,-1]]}function conv(){const k=getKernel(),out=[];for(let i=0;i<3;i++){let row=[];for(let j=0;j<3;j++){let v=0;for(let a=0;a<2;a++)for(let b=0;b<2;b++)v+=img[i+a][j+b]*k[a][b];row.push(v)}out.push(row)}return out}function show(){$('w-label').textContent=slider.value;output('Ảnh:\n'+img.map(x=>x.join(' ')).join('\n')+'\nKernel:\n'+getKernel().map(x=>x.join(' ')).join('\n')+'\nKết quả 3×3:\n'+conv().map(x=>x.join(' ')).join('\n'))}slider.oninput=show;$('calc').onclick=async()=>{if(!backend){output('Web tĩnh chỉ tính minh họa bằng JavaScript. Chạy backend để gọi models.Convolve.');return}try{const r=await api('POST','/api/q5/convolve',{image:img,kernel:getKernel()});output('PyTorch models.Convolve: '+JSON.stringify(r.output))}catch(e){output(e.message)}};show()}
+function q6(){$('demo').innerHTML='<h2>Q6 — Causal Self-Attention</h2><p>Attention dùng Q, K, V và mặt nạ nhân quả: token tại vị trí i chỉ xem được các token ≤ i.</p><div id="triangular" class="matrix" style="--n:4"></div><button class="action" id="run">Tính Attention bằng PyTorch</button><div id="result" class="output"></div><p class="small muted">Code: Attention(layer_size, block_size). Không chạy Q7.</p>';let html='';for(let i=0;i<4;i++)for(let j=0;j<4;j++)html+=`<span class="cell ${j>i?'mask':''}">${j>i?'×':'✓'}</span>`;$('triangular').innerHTML=html;output('Mặt nạ nhân quả 4×4: × là vị trí không được phép truy cập.');$('run').onclick=async()=>{if(!backend){output('Đây là ma trận mask chính xác. Muốn có trọng số attention từ mô hình PyTorch thực, chạy backend.');return}try{const v=await api('POST','/api/q6',{tokens:[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]});output('Attention weights (mỗi hàng tổng = 1):\n'+v.attention.map(row=>row.map(x=>x.toFixed(3)).join('  ')).join('\n'))}catch(e){output(e.message)}}}
+document.querySelectorAll('[data-q]').forEach(el=>el.onclick=()=>setQ(el.dataset.q));setQ('q1');initialize();
+</script>
+</body></html>
