@@ -210,26 +210,26 @@ class LanguageIDModel(Module):
 
 
 def Convolve(input_matrix, weight_matrix):
+    """Valid 2D cross-correlation with stride 1 and no padding.
+
+    Supports one image (H, W) or a batch (N, H, W).
+    Only the already-imported PyTorch operations are used; autograd can
+    differentiate with respect to both the image and the kernel.
     """
-    Tính phép tích chập 2D giữa input_matrix (28x28) và weight_matrix (3x3)
-    Trả về Tensor 2D kích thước (26, 26)
-    """
-    input_height, input_width = input_matrix.shape
+    height, width = input_matrix.shape[-2:]
     kernel_height, kernel_width = weight_matrix.shape
+    out_height = height - kernel_height + 1
+    out_width = width - kernel_width + 1
 
-    out_height = input_height - kernel_height + 1
-    out_width = input_width - kernel_width + 1
-
-    output_rows = []
-    for i in range(out_height):
-        row = []
-        for j in range(out_width):
-            sub_matrix = input_matrix[i : i + kernel_height, j : j + kernel_width]
-            val = (sub_matrix * weight_matrix).sum()
-            row.append(val)
-        output_rows.append(stack(row))
-
-    return stack(output_rows)
+    windows = stack(
+        [
+            input_matrix[..., i:i + out_height, j:j + out_width]
+            for i in range(kernel_height)
+            for j in range(kernel_width)
+        ],
+        dim=-1,
+    )
+    return matmul(windows, weight_matrix.reshape(-1))
 
 
 class DigitConvolutionalModel(Module):
@@ -259,10 +259,7 @@ class DigitConvolutionalModel(Module):
 
     def forward(self, x):
         x = x.reshape(len(x), 28, 28)
-        x = stack(
-            list(map(lambda sample: Convolve(sample, self.convolution_weights), x))
-        )
-        x = x.flatten(start_dim=1)
+        x = Convolve(x, self.convolution_weights).flatten(start_dim=1)
 
         x = relu(matmul(x, self.w1) + self.b1)
         x = matmul(x, self.w2) + self.b2
